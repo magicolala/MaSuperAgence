@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Gérer les biens' %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="row text-right">
+            <div class="col-md-12">
+                <a href="{{ path('admin.property.new') }}" class="btn btn-primary ">Créer un nouveau bien</a>
+            </div>
+        </div>
+
+        <h1>Gérer les biens</h1>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Titre</th>
+                <th class="text-right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for property in properties %}
+                <tr>
+                    <td>{{ property.title }}</td>
+                    <td class="text-right">
+                        <a href="{{ path('admin.property.edit', {id: property.id}) }}" class="btn btn-info"
+                           style="display: inline-block">Editer</a>
+                        <form method="post" action="{{ path('admin.property.delete', {id: property.id}) }}"
+                              style="display: inline-block" onsubmit="return confirm('Etes vous vraiment sûr ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ property.id) }}">
+                            <button class="btn btn-block btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            function slideUp() {
+                $('.alert-message').slideUp('slow');
+            };
+            setTimeout(slideUp, 5000);
+        });
+    </script>
+{% endblock %}
