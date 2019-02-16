@@ -45,6 +45,16 @@ class PropertyRepository extends ServiceEntityRepository
             ;
         }
 
+        if ($search->getAlternatives()->count() > 0) {
+            $k= 0;
+            foreach ($search->getAlternatives() as $alternative) {
+                $query = $query
+                    ->andWhere(":alternative$k MEMBER OF p.alternatives")
+                    ->setParameter("alternative$k", $alternative)
+                ;
+            }
+        }
+
         return $query->getQuery();
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -93,9 +95,15 @@ class Property
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Alternative", inversedBy="properties")
+     */
+    private $alternatives;
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
+        $this->alternatives = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -270,6 +278,34 @@ class Property
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Alternative[]
+     */
+    public function getAlternatives(): Collection
+    {
+        return $this->alternatives;
+    }
+
+    public function addAlternative(Alternative $alternative): self
+    {
+        if (!$this->alternatives->contains($alternative)) {
+            $this->alternatives[] = $alternative;
+            $alternative->addProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlternative(Alternative $alternative): self
+    {
+        if ($this->alternatives->contains($alternative)) {
+            $this->alternatives->removeElement($alternative);
+            $alternative->removeProperty($this);
+        }
 
         return $this;
     }

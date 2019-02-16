@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Gérer les options' %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="row text-right">
+            <div class="col-md-12">
+                <a href="{{ path('admin.alternative.new') }}" class="btn btn-primary ">Créer une nouvelle option</a>
+            </div>
+        </div>
+
+        <h1>Gérer les options</h1>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th class="text-right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alternative in alternatives %}
+                <tr>
+                    <td>{{ alternative.name }}</td>
+                    <td class="text-right">
+                        <a href="{{ path('admin.alternative.edit', {id: alternative.id}) }}" class="btn btn-info"
+                           style="display: inline-block">Editer</a>
+                        <form method="post" action="{{ path('admin.alternative.delete', {id: alternative.id}) }}"
+                              style="display: inline-block" onsubmit="return confirm('Etes vous vraiment sûr ?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ alternative.id) }}">
+                            <button class="btn btn-block btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            function slideUp() {
+                $('.alert-message').slideUp('slow');
+            };
+            setTimeout(slideUp, 5000);
+        });
+    </script>
+{% endblock %}
