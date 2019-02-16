@@ -100,10 +100,12 @@ class Property
      */
     private $alternatives;
 
+
     public function __construct()
     {
         $this->created_at = new \DateTime();
         $this->alternatives = new ArrayCollection();
+
     }
 
     public function getId(): ?int
