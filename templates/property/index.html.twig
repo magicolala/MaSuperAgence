@@ -45,3 +45,14 @@
         </div>
     </div>
 {% endblock body %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+           $('select').select2({
+               placeholder: "Sélectionner une option",
+               allowClear: true
+           });
+        });
+    </script>
+{% endblock %}

@@ -7,7 +7,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-
+                    {% if property.filename %}
+                        <img src="{{ vich_uploader_asset(property, 'imageFile') | imagine_filter('medium') }}" class="img-fluid" />
+                    {% else %}
+                        <img src="{{ asset('images/empty.PNG') | imagine_filter('medium') }}" class="img-fluid" />
+                    {% endif %}
                 </div>
                 <div class="col-md-4">
                     <h1>{{ property.title }}</h1>
@@ -51,6 +55,11 @@
             </div>
             <div class="col-md-4">
                 <h2>Spécificités</h2>
+                <ul class="list-group">
+                    {% for alternative in property.alternatives %}
+                        <li class="list-group-item">{{ alternative.name  }}</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
